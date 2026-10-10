@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\EmprendedorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,11 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
     Route::get('/panel', function () {
         return 'Panel del administrador';
     })->name('admin.panel');
+
+
+    Route::get('/emprendedores', [EmprendedorController::class, 'index'])->name('admin.emprendedores.index');
+    Route::get('/emprendedores/crear', [EmprendedorController::class, 'create'])->name('admin.emprendedores.create');
+    Route::post('/emprendedores', [EmprendedorController::class, 'store'])->name('admin.emprendedores.store');
 });
 
 require __DIR__ . '/auth.php';
