@@ -46,6 +46,24 @@
                 </div>
             @endif
         </div>
+        <!-- Campos agregados por Jaime (CU03) -->
+        <div>
+            <x-input-label for="actividad_economica" value="Actividad Económica" />
+            <x-text-input id="actividad_economica" name="actividad_economica" type="text" class="mt-1 block w-full" :value="old('actividad_economica', $user->actividad_economica)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('actividad_economica')" />
+        </div>
+
+        <div>
+            <x-input-label for="ubicacion" value="Ubicación" />
+            <x-text-input id="ubicacion" name="ubicacion" type="text" class="mt-1 block w-full" :value="old('ubicacion', $user->ubicacion)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('ubicacion')" />
+        </div>
+
+        <div>
+            <x-input-label for="telefono" value="Teléfono" />
+            <x-text-input id="telefono" name="telefono" type="text" class="mt-1 block w-full" :value="old('telefono', $user->telefono)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('telefono')" />
+        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

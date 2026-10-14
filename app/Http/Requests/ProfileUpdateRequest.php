@@ -26,6 +26,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            // Tus campos agregados para el CU03
+            'actividad_economica' => ['required', 'string', 'max:255'],
+            'ubicacion' => ['required', 'string', 'max:255'],
+            'telefono' => ['required', 'string', 'max:20'],
         ];
     }
 }
