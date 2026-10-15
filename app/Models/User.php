@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Inscripcion::class);
     }
+
+        public function hasRole(string $rol): bool
+    {
+        return $this->rol === $rol;
+    }
 }
