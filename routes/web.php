@@ -30,3 +30,18 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
 });
 
 require __DIR__ . '/auth.php';
+
+// ==========================================
+// --- Módulo de Inscripciones (Mariana) ---
+// ==========================================
+
+// Rutas para el emprendedor (requieren autenticación)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/inscripciones', [App\Http\Controllers\InscripcionController::class, 'index'])->name('inscripciones.index');
+    Route::post('/inscripciones', [App\Http\Controllers\InscripcionController::class, 'store'])->name('inscripciones.store');
+});
+
+// Rutas para el administrador (requieren rol de administrador y autenticación)
+Route::middleware(['auth', 'role:administrador'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/inscripciones', [App\Http\Controllers\Admin\InscripcionController::class, 'index'])->name('inscripciones.index');
+});
