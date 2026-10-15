@@ -10,12 +10,23 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+<!-- Navigation Links -->
+<div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+        {{ __('Dashboard') }}
+    </x-nav-link>
 
+    <!-- Enlaces de Inscripciones (Mariana) -->
+    <x-nav-link :href="route('inscripciones.index')" :active="request()->routeIs('inscripciones.index')">
+        {{ __('Mis Inscripciones') }}
+    </x-nav-link>
+
+    @if(auth()->check() && auth()->user()->hasRole('administrador'))
+        <x-nav-link :href="route('admin.inscripciones.index')" :active="request()->routeIs('admin.inscripciones.index')">
+            {{ __('Gestionar Inscripciones') }}
+        </x-nav-link>
+    @endif
+</div>
                     @if (Auth::user()->rol === 'administrador')
                         <x-nav-link :href="route('admin.emprendedores.index')" :active="request()->routeIs('admin.emprendedores.*')">
                             Emprendedores
