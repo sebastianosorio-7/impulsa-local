@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\EmprendedorController;
+use App\Http\Controllers\Admin\ProgresoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,9 +10,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// ==========================================
+// --- Dashboard por rol (Sebastián) ---
+// ==========================================
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -18,15 +23,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// ==========================================
+// --- Registro de emprendedores (CU01) y Progreso (Sebastián) ---
+// ==========================================
 Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(function () {
     Route::get('/panel', function () {
         return 'Panel del administrador';
     })->name('admin.panel');
 
-
+    // CU01: el administrador registra emprendedores
     Route::get('/emprendedores', [EmprendedorController::class, 'index'])->name('admin.emprendedores.index');
     Route::get('/emprendedores/crear', [EmprendedorController::class, 'create'])->name('admin.emprendedores.create');
     Route::post('/emprendedores', [EmprendedorController::class, 'store'])->name('admin.emprendedores.store');
+
+    // Seguimiento del progreso de las inscripciones
+    Route::get('/progreso', [ProgresoController::class, 'index'])->name('admin.progreso.index');
+    Route::put('/progreso/{inscripcion}', [ProgresoController::class, 'update'])->name('admin.progreso.update');
 });
 
 require __DIR__ . '/auth.php';

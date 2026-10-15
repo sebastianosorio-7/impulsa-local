@@ -36,6 +36,10 @@
                         <x-nav-link :href="route('admin.inscripciones.index')" :active="request()->routeIs('admin.inscripciones.index')">
                             Gestionar Inscripciones
                         </x-nav-link>
+
+                        <x-nav-link :href="route('admin.progreso.index')" :active="request()->routeIs('admin.progreso.*')">
+                            Progreso
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -120,6 +124,10 @@
 
                 <x-responsive-nav-link :href="route('admin.inscripciones.index')" :active="request()->routeIs('admin.inscripciones.index')">
                     Gestionar Inscripciones
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.progreso.index')" :active="request()->routeIs('admin.progreso.*')">
+                    Progreso
                 </x-responsive-nav-link>
             @endif
         </div>
