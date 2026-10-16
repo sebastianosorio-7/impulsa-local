@@ -7,28 +7,47 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <p class="text-gray-600 mb-6">Consulta los cursos disponibles para fortalecer tu emprendimiento.</p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @forelse($capacitaciones as $curso)
-                        <div class="border border-gray-200 rounded-lg p-5 shadow-sm bg-gray-50 flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $curso->nombre }}</h3>
-                                <p class="text-sm text-gray-600 mb-4">{{ $curso->descripcion }}</p>
+            <!-- Mensajes de alerta -->
+            @if(session('success'))
+                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @forelse($capacitaciones ?? [] as $capacitacion)
+                            <div class="border p-4 rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">{{ $capacitacion->nombre }}</h4>
+                                <p class="text-sm text-gray-600 mt-1">{{ $capacitacion->descripcion ?? 'Sin descripción' }}</p>
+                                <p class="text-sm mt-2"><strong>Cupo máximo:</strong> {{ $capacitacion->cupo }}</p>
+                                
+                               <!-- Formulario de Inscripción -->
+<form action="{{ route('inscripciones.store') }}" method="POST" style="margin-top: 15px;">
+    @csrf
+    <input type="hidden" name="capacitacion_id" value="{{ $capacitacion->id }}">
+    
+    <button type="submit" style="background-color: #2563eb; color: white; padding: 10px 15px; border: none; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer;">
+        Inscribirme
+    </button>
+</form>
                             </div>
-                            
-                            <div class="border-t border-gray-200 pt-3 text-xs text-gray-500 space-y-1">
-                                <p>📅 <strong>Fecha:</strong> {{ $curso->fecha }}</p>
-                                <p>👥 <strong>Cupos restantes:</strong> <span class="text-sm font-semibold text-indigo-600">{{ $curso->cupo }}</span></p>
+                        @empty
+                            <div class="col-span-3 text-center py-8 text-gray-500">
+                                No hay capacitaciones programadas por el momento.
                             </div>
-                            <!-- Mariana incrustará aquí su formulario de inscripción del CU07 -->
-                        </div>
-                    @empty
-                        <div class="col-span-3 text-center py-8 text-gray-500">
-                            No hay capacitaciones programadas por el momento.
-                        </div>
-                    @endforelse
+                        @endforelse
+                    </div>
+
                 </div>
             </div>
         </div>
