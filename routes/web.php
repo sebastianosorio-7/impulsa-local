@@ -45,9 +45,10 @@ require __DIR__ . '/auth.php';
 
 // --- Gestión de Capacitaciones y Perfil (Jaime) ---
 
-// Rutas de Administración (CU05)
+// Rutas de Administración corregidas (CU05)
 Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('capacitaciones', App\Http\Controllers\Admin\CapacitacionController::class);
+    Route::resource('capacitaciones', App\Http\Controllers\Admin\CapacitacionController::class)
+        ->parameters(['capacitaciones' => 'capacitacion']);
 });
 
 // Rutas de Emprendedor / Catálogo (CU06)

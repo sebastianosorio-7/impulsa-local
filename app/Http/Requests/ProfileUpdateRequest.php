@@ -26,9 +26,9 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            // Tus campos agregados para el CU03
-            'actividad_economica' => ['required', 'string', 'max:255'],
-            'ubicacion' => ['required', 'string', 'max:255'],
+             // Tus campos modificados para el CU03 (Soportan valores vacíos/null)
+            'actividad_economica' => ['nullable', 'string', 'max:255'],
+            'ubicacion' => ['nullable', 'string', 'max:255'],
             'telefono' => ['required', 'string', 'max:20'],
         ];
     }
