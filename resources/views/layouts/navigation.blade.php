@@ -40,6 +40,10 @@
                         <x-nav-link :href="route('admin.progreso.index')" :active="request()->routeIs('admin.progreso.*')">
                             Progreso
                         </x-nav-link>
+
+                        <x-nav-link :href="route('admin.reportes.index')" :active="request()->routeIs('admin.reportes.*')">
+                            Reportes
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -128,6 +132,10 @@
 
                 <x-responsive-nav-link :href="route('admin.progreso.index')" :active="request()->routeIs('admin.progreso.*')">
                     Progreso
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.reportes.index')" :active="request()->routeIs('admin.reportes.*')">
+                    Reportes
                 </x-responsive-nav-link>
             @endif
         </div>

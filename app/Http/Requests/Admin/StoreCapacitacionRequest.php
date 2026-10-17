@@ -18,6 +18,10 @@ class StoreCapacitacionRequest extends FormRequest
             'descripcion' => 'required|string',
             'cupo' => 'required|integer|min:1',
             'fecha' => 'required|date|after_or_equal:today',
+            // Campos obligatorios requeridos por la tabla:
+            'area' => 'required|string|max:255',
+            'requisitos' => 'required|string',
+            'hora' => 'required',
         ];
     }
 }
