@@ -39,6 +39,9 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
     // Seguimiento del progreso de las inscripciones
     Route::get('/progreso', [ProgresoController::class, 'index'])->name('admin.progreso.index');
     Route::put('/progreso/{inscripcion}', [ProgresoController::class, 'update'])->name('admin.progreso.update');
+
+    // --- Reportes (Rous) ---
+    Route::get('/reportes', [\App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('admin.reportes.index');
 });
 
 require __DIR__ . '/auth.php';
