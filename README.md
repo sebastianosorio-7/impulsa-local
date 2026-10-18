@@ -1,59 +1,123 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Impulsa Local
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicación web de la **Alcaldía de Ciudad Nueva** para apoyar a pequeños emprendedores del municipio: el administrador registra a los emprendedores y publica capacitaciones, y los emprendedores se inscriben en ellas. El sistema permite además hacer seguimiento al avance de cada inscripción y consultar reportes.
 
-## About Laravel
+Proyecto de la **Fase 3** del curso *Framework para el Desarrollo Web* (UNAD), grupo **202047928_3**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Equipo
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Integrante | Rol |
+|---|---|
+| Sebastián Calvo Osorio | Líder del proyecto |
+| Jaime Arguelles | Desarrollo |
+| Mariana León | Desarrollo y pruebas |
+| Rous Zabaleta | Desarrollo y documentación |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tecnologías
 
-## Learning Laravel
+- **Laravel 12** (PHP 8.2 o superior), patrón MVC
+- **Laravel Breeze** para la autenticación (Blade, Tailwind CSS, Alpine.js)
+- **MySQL** con **XAMPP** (Apache + MySQL)
+- **Vite** y **npm** para compilar los estilos
+- **Git y GitHub** con ramas y Pull Requests
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Funcionalidades
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Administrador
+- Registrar emprendedores (**no existe registro público**: `/register` está cerrado).
+- Crear, editar y eliminar capacitaciones.
+- Ver las inscripciones de cada capacitación.
+- Actualizar el estado y el avance (0 a 100) de cada inscripción. Al llegar a 100 queda como *Finalizado*.
+- Consultar reportes: emprendedores activos, sectores más comunes y cursos más solicitados, con filtro por sector.
 
-## Laravel Sponsors
+### Emprendedor
+- Ver las capacitaciones disponibles con fecha y cupos restantes.
+- Inscribirse en una capacitación, con control de cupo y de inscripciones duplicadas.
+- Ver sus inscripciones y su avance.
+- Actualizar su perfil (actividad económica, ubicación y teléfono).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+El menú y el dashboard cambian según el rol del usuario. Las rutas del administrador están protegidas con el middleware `rol:administrador` (responde 403 a cualquier otro rol).
 
-### Premium Partners
+## Instalación (Windows con XAMPP)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Requisitos:** XAMPP con PHP 8.2 o superior (extensión `intl` activada), Composer, Node.js LTS y Git.
 
-## Contributing
+1. Abre XAMPP y enciende **Apache** y **MySQL**.
+2. Clona el proyecto e instala las dependencias:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cd C:\xampp\htdocs
+git clone https://github.com/sebastianosorio-7/impulsa-local.git
+cd impulsa-local
+composer install
+npm install
+npm run build
+copy .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+3. Crea la base de datos y los datos iniciales. Si pregunta por crear la base `impulsa_local`, responde `yes`:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan migrate --seed
+```
 
-## Security Vulnerabilities
+4. Abre en el navegador: `http://localhost/impulsa-local/public`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Si la página se ve sin estilos, en el archivo `.env` pon `APP_URL=http://localhost/impulsa-local/public`, ejecuta `php artisan config:clear` y recarga con Ctrl + F5.
 
-## License
+### Usuarios de prueba
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administrador | `admin@impulsalocal.gov.co` | `Admin12345` |
+| Emprendedor | Se crea desde el panel del administrador (menú **Emprendedores**) | La que se defina al registrarlo |
+
+> Credenciales solo para pruebas en entorno local.
+
+El seeder crea el administrador y 3 capacitaciones de ejemplo.
+
+## División del trabajo
+
+Cada integrante construyó funciones completas (ruta, controlador, vista y validación) en su propia rama, para no depender de los demás.
+
+| Integrante | Responsabilidad |
+|---|---|
+| **Sebastián** | Registro de emprendedores por el administrador (CU01), cierre del registro público, seguimiento del progreso de inscripciones, dashboard y menú por rol, integración final de las ramas y pruebas |
+| **Jaime** | Gestión de capacitaciones del administrador (CU05), catálogo para el emprendedor (CU06) y actualización del perfil (CU03) |
+| **Mariana** | Inscripción con control de cupo (CU07), "Mis inscripciones" y listado de inscripciones del administrador |
+| **Rous** | Reportes (CU09 y CU10) y documentación (esquemas de BackEnd y FrontEnd) |
+
+### Flujo de trabajo con Git
+
+- `main` es la versión estable: nadie trabaja directamente en ella.
+- Cada tarea se hace en una rama propia creada desde `main` actualizado (`git checkout main`, `git pull`, `git checkout -b nombre-de-la-tarea`).
+- Al terminar se abre un **Pull Request**. El líder lo revisa, lo prueba y lo une a `main`.
+- Los Pull Requests (#1 al #5) y el historial de commits muestran el aporte de cada integrante.
+
+## Pruebas y depuración
+
+Antes de unir las ramas a `main` se probaron juntas en una rama de integración, recorriendo el flujo completo:
+
+- [x] El administrador inicia sesión y registra emprendedores con distintos sectores
+- [x] El administrador crea, edita y elimina capacitaciones
+- [x] El emprendedor inicia sesión y ve el catálogo con cupos restantes
+- [x] El emprendedor se inscribe y los cupos bajan en 1
+- [x] Una segunda inscripción en el mismo curso es rechazada con un mensaje
+- [x] "Mis inscripciones" muestra el curso
+- [x] El administrador ve la inscripción y actualiza su avance
+- [x] Los reportes muestran sectores y cursos más pedidos, y el filtro por sector funciona
+- [x] Un emprendedor no puede entrar a las rutas del administrador (403)
+
+Problemas encontrados y cómo se resolvieron:
+
+| Problema | Causa | Solución |
+|---|---|---|
+| MySQL de XAMPP no arrancaba | El servicio `MySQL80` de Windows ocupaba el puerto 3306 | Detener y deshabilitar `MySQL80` |
+| Error `hasRole()` en el menú | El modelo `User` no tenía ese método | Usar `Auth::user()->rol` y agregar `hasRole()` al modelo |
+| Rutas con `role:` daban error | El alias del middleware se llama `rol` | Corregir a `rol:administrador` |
+| `View [...] not found` | Vistas en carpeta equivocada o sin subir al repositorio | Mover y subir las vistas faltantes |
+| Parámetro `{capacitacione}` en las rutas | Plural en español mal singularizado por Laravel | `->parameters(['capacitaciones' => 'capacitacion'])` |
+| Error de columna `role` en reportes | La tabla usa `rol` | Corregir el nombre de la columna |
+| Estilos nuevos no aparecían | Tailwind solo incluye las clases vistas al compilar | Ejecutar `npm run build` |
+| Historial no relacionado en una rama | La rama venía de otro proyecto | No unirla; se rehízo el trabajo sobre `main` |
