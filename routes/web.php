@@ -36,6 +36,12 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
     Route::get('/emprendedores/crear', [EmprendedorController::class, 'create'])->name('admin.emprendedores.create');
     Route::post('/emprendedores', [EmprendedorController::class, 'store'])->name('admin.emprendedores.store');
 
+    // Fase 4: gestión completa de emprendedores
+    Route::get('/emprendedores/{emprendedor}/editar', [EmprendedorController::class, 'edit'])->name('admin.emprendedores.edit');
+    Route::put('/emprendedores/{emprendedor}', [EmprendedorController::class, 'update'])->name('admin.emprendedores.update');
+    Route::patch('/emprendedores/{emprendedor}/estado', [EmprendedorController::class, 'cambiarEstado'])->name('admin.emprendedores.estado');
+    Route::delete('/emprendedores/{emprendedor}', [EmprendedorController::class, 'destroy'])->name('admin.emprendedores.destroy');
+
     // Seguimiento del progreso de las inscripciones
     Route::get('/progreso', [ProgresoController::class, 'index'])->name('admin.progreso.index');
     Route::put('/progreso/{inscripcion}', [ProgresoController::class, 'update'])->name('admin.progreso.update');
