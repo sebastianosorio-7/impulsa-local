@@ -29,7 +29,7 @@
         <x-input-error :messages="$errors->get('requisitos')" class="mt-2" />
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
             <x-input-label for="fecha" value="Fecha" />
             <x-text-input id="fecha" name="fecha" type="date" class="mt-1 block w-full" :value="old('fecha', $c?->fecha)" required />
@@ -46,6 +46,16 @@
             <x-input-label for="cupo" value="Cupo" />
             <x-text-input id="cupo" name="cupo" type="number" min="1" class="mt-1 block w-full" :value="old('cupo', $c?->cupo)" required />
             <x-input-error :messages="$errors->get('cupo')" class="mt-2" />
+        </div>
+         <!-- NUEVO CAMPO DE ESTADO INTEGRADO -->
+        <div>
+            <x-input-label for="estado" value="Estado" />
+            <select id="estado" name="estado" required
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-700 h-[42px]">
+                <option value="abierta" {{ old('estado', $c?->estado) == 'abierta' ? 'selected' : '' }}>Abierta</option>
+                <option value="cerrada" {{ old('estado', $c?->estado) == 'cerrada' ? 'selected' : '' }}>Cerrada</option>
+            </select>
+            <x-input-error :messages="$errors->get('estado')" class="mt-2" />
         </div>
     </div>
 </div>

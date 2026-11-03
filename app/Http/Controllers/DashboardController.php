@@ -23,8 +23,13 @@ class DashboardController extends Controller
         } else {
             $resumen = [
                 'inscripciones' => $user->inscripciones()->count(),
-                'finalizadas'   => $user->inscripciones()->where('estado', 'Finalizado')->count(),
-                'disponibles'   => Capacitacion::where('fecha', '>=', now()->toDateString())->count(),
+                'finalizadas'   => $user->inscripciones()
+                    ->where('estado', 'Finalizado')
+                    ->count(),
+            
+                'disponibles'   => Capacitacion::where('estado', 'Abierta')
+                    ->where('fecha', '>=', now()->toDateString())
+                    ->count(),
             ];
         }
 

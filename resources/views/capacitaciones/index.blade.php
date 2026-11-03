@@ -21,6 +21,15 @@
                 </div>
             @endif
 
+            <!-- TU NUEVO BUSCADOR PARA EL EMPRENDEDOR -->
+            <form method="GET" action="{{ route('capacitaciones.index') }}" class="mb-6 flex gap-2">
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar capacitación por nombre o área..." 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md text-sm font-semibold transition-colors">
+                    Buscar
+                </button>
+            </form>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <p class="text-gray-600 mb-6">Consulta los cursos disponibles para fortalecer tu emprendimiento.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -34,24 +43,31 @@
                                 <p>📅 <strong>Fecha:</strong> {{ $curso->fecha }}</p>
                                 <p>👥 <strong>Cupos restantes:</strong>
                                     <span class="text-sm font-semibold text-indigo-600">
-                                        {{ $curso->cupo - ($curso->inscripciones ? $curso->inscripciones->count() : 0) }}
+                                        {{ $curso->cuposDisponibles() }}
                                     </span>
                                 </p>
 
-                                <!-- Formulario de Inscripción (Mariana) -->
-                                <form action="{{ route('inscripciones.store') }}" method="POST" style="margin-top: 15px;">
-                                    @csrf
-                                    <input type="hidden" name="capacitacion_id" value="{{ $curso->id }}">
-
-                                    <button type="submit" style="background-color: #2563eb; color: white; padding: 10px 15px; border: none; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer;">
-                                        Inscribirme
+                                <!-- VALIDACIÓN DE CUPO LLENO EXIGIDA EN TU REPARTO -->
+                                @if($curso->cuposDisponibles() <= 0)
+                                    <button class="w-full bg-red-500 text-white font-bold py-2 px-4 rounded shadow-sm opacity-60 cursor-not-allowed text-center text-sm" style="margin-top: 15px;" disabled>
+                                        Cupo lleno
                                     </button>
-                                </form>
+                                @else
+                                    <!-- Formulario de Inscripción (Mariana) -->
+                                    <form action="{{ route('inscripciones.store') }}" method="POST" style="margin-top: 15px;">
+                                        @csrf
+                                        <input type="hidden" name="capacitacion_id" value="{{ $curso->id }}">
+
+                                        <button type="submit" style="background-color: #2563eb; color: white; padding: 10px 15px; border: none; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer;">
+                                            Inscribirme
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     @empty
                         <div class="col-span-3 text-center py-8 text-gray-500">
-                            No hay capacitaciones programadas por el momento.
+                            No se encontraron capacitaciones disponibles en este momento.
                         </div>
                     @endforelse
                 </div>

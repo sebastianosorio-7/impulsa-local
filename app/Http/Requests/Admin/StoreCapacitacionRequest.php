@@ -36,6 +36,7 @@ class StoreCapacitacionRequest extends FormRequest
             'fecha'       => $reglaFecha,
             'hora'        => ['required', 'date_format:H:i'],
             'cupo'        => ['required', 'integer', 'min:1'],
+            'estado'      => ['required', 'string', 'in:abierta,cerrada'], // TU NUEVA REGLA REQUERIDA
         ];
     }
 
@@ -49,6 +50,7 @@ class StoreCapacitacionRequest extends FormRequest
             'fecha'       => 'fecha',
             'hora'        => 'hora',
             'cupo'        => 'cupo',
+            'estado'      => 'estado', // ATRIBUTO EN ESPAÑOL
         ];
     }
 
@@ -63,6 +65,7 @@ class StoreCapacitacionRequest extends FormRequest
             'date'                 => 'Escribe una fecha válida.',
             'fecha.after_or_equal' => 'La fecha no puede estar en el pasado.',
             'hora.date_format'     => 'Escribe una hora válida (por ejemplo 16:00).',
+            'estado.in'            => 'El estado seleccionado no es válido (debe ser abierta o cerrada).', // MENSAJE PERSONALIZADO
         ];
     }
 }
