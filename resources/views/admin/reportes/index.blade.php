@@ -7,7 +7,46 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+<!-- Formulario de Filtros por Fechas y Exportación a CSV -->
+<div class="bg-white shadow-sm sm:rounded-lg p-6 mb-6">
+    <form method="GET" action="{{ route('admin.reportes.index') }}" class="flex flex-wrap gap-4 items-end">
+        
+        <!-- Filtro: Desde -->
+        <div>
+            <label for="desde" class="block text-sm font-medium text-gray-700">Desde:</label>
+            <input type="date" name="desde" id="desde" value="{{ request('desde') }}"class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
 
+        <!-- Filtro: Hasta -->
+        <div>
+            <label for="hasta" class="block text-sm font-medium text-gray-700">Hasta:</label>
+            <input type="date" name="hasta" id="hasta" value="{{ request('hasta') }}" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Filtro: Sector -->
+        <div>
+            <label for="sector" class="block text-sm font-medium text-gray-700">Sector:</label>
+            <select name="sector" id="sector" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="">Todos los sectores</option>
+                @foreach($sectores as $s)
+                    <option value="{{ $s->actividad_economica }}" {{ request('sector') == $s->actividad_economica ? 'selected' : '' }}>
+                        {{ $s->actividad_economica }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="flex gap-2">
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium">
+                Filtrar
+            </button>
+            
+            <a href="{{ route('admin.reportes.export', request()->all()) }}" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 text-sm font-medium flex items-center">
+                Exportar CSV
+            </a>
+        </div>
+    </form>
+</div>
             <!-- Resumen -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">

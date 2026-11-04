@@ -52,4 +52,48 @@ class ReporteController extends Controller
             'sector'
         ));
     }
+public function export(Request $request)
+    {
+        $sector = $request->query('sector');
+        $desde = $request->query('desde');
+        $hasta = $request->query('hasta');
+
+        $emprendedores = User::where('rol', 'emprendedor')
+            ->when($sector, fn($q) => $q->where('actividad_economica', $sector))
+            ->when($desde, fn($q) => $q->whereDate('created_at', '>=', $desde))
+            ->when($hasta, fn($q) => $q->whereDate('created_at', '<=', $hasta))
+            ->orderBy('name')
+            ->get();
+
+        $fileName = 'reporte_emprendedores_' . date('Y-m-d') . '.csv';
+
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $callback = function() use ($emprendedores) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($file, ['Nombre', 'Correo', 'Actividad Económica', 'Estado', 'Fecha de Registro']);
+
+            foreach ($emprendedores as $emp) {
+                fputcsv($file, [
+                    $emp->name,
+                    $emp->email,
+                    $emp->actividad_economica,
+                    $emp->estado ?? 'N/A',
+                    $emp->created_at ? $emp->created_at->format('Y-m-d') : ''
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
