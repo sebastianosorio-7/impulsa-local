@@ -48,6 +48,7 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
 
     // --- Reportes (Rous) ---
     Route::get('/reportes', [\App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('admin.reportes.index');
+    Route::get('/reportes/exportar', [\App\Http\Controllers\Admin\ReporteController::class, 'export'])->name('admin.reportes.export');
 });
 
 require __DIR__ . '/auth.php';
@@ -72,7 +73,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/inscripciones', [App\Http\Controllers\InscripcionController::class, 'index'])->name('inscripciones.index');
     Route::post('/inscripciones', [App\Http\Controllers\InscripcionController::class, 'store'])->name('inscripciones.store');
-});
+Route::delete('/inscripciones/{inscripcion}', [\App\Http\Controllers\InscripcionController::class, 'destroy'])->name('inscripciones.destroy');
+    });
 
 // Rutas para el administrador (requieren rol de administrador y autenticación)
 Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->name('admin.')->group(function () {
