@@ -12,12 +12,16 @@ class ReporteController extends Controller
 {
     public function index(Request $request)
     {
-        // Filtro opcional por sector (viene de la URL: ?sector=...)
+        // Filtros opcionales (vienen de la URL: ?sector=...&desde=...&hasta=...)
         $sector = $request->query('sector');
+        $desde  = $request->query('desde');
+        $hasta  = $request->query('hasta');
 
-        // CU09: emprendedores (se puede filtrar por sector)
+        // CU09: emprendedores (se puede filtrar por sector y por fecha de registro)
         $emprendedores = User::where('rol', 'emprendedor')
             ->when($sector, fn($q) => $q->where('actividad_economica', $sector))
+            ->when($desde, fn($q) => $q->whereDate('created_at', '>=', $desde))
+            ->when($hasta, fn($q) => $q->whereDate('created_at', '<=', $hasta))
             ->orderBy('name')
             ->get();
 
@@ -52,7 +56,7 @@ class ReporteController extends Controller
             'sector'
         ));
     }
-public function export(Request $request)
+    public function export(Request $request)
     {
         $sector = $request->query('sector');
         $desde = $request->query('desde');
@@ -75,10 +79,10 @@ public function export(Request $request)
             "Expires"             => "0"
         ];
 
-        $callback = function() use ($emprendedores) {
+        $callback = function () use ($emprendedores) {
             $file = fopen('php://output', 'w');
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
             fputcsv($file, ['Nombre', 'Correo', 'Actividad Económica', 'Estado', 'Fecha de Registro']);
 
             foreach ($emprendedores as $emp) {

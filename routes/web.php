@@ -48,6 +48,7 @@ Route::middleware(['auth', 'rol:administrador'])->prefix('admin')->group(functio
 
     // --- Reportes (Rous) ---
     Route::get('/reportes', [\App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('admin.reportes.index');
+    Route::get('/reportes/exportar', [\App\Http\Controllers\Admin\ReporteController::class, 'export'])->name('admin.reportes.export');
 });
 
 require __DIR__ . '/auth.php';
