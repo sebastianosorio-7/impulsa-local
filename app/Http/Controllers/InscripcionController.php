@@ -30,33 +30,39 @@ class InscripcionController extends Controller
         ]);
 
         $userId = auth()->id();
-        $capacitacionId = $request->capacitacion_id;
+        $capacitacion = Capacitacion::findOrFail($request->capacitacion_id);
 
-        // 1. Buscar si ya existe un registro previo (activo o cancelado)
+        // 1. Buscar si ya existe un registro previo (activo, finalizado o cancelado)
         $inscripcionExistente = Inscripcion::where('user_id', $userId)
-            ->where('capacitacion_id', $capacitacionId)
+            ->where('capacitacion_id', $capacitacion->id)
             ->first();
 
-        if ($inscripcionExistente) {
-            // Si ya está activo, avisar al usuario
-            if ($inscripcionExistente->estado === 'Inscrito') {
-                return redirect()->back()->with('error', 'Ya estás inscrito en esta capacitación.');
-            }
+        // Solo se puede volver a inscribir quien canceló; los demás ya están inscritos
+        if ($inscripcionExistente && strtolower($inscripcionExistente->estado) !== 'cancelada') {
+            return redirect()->back()->with('error', 'Ya estás inscrito en esta capacitación.');
+        }
 
-            // Si estaba cancelada, la reactivamos cambiando su estado
+        // 2. Control de cupo (también al reactivar una inscripción cancelada)
+        if ($capacitacion->cuposDisponibles() <= 0) {
+            return redirect()->back()->with('error', 'Lo sentimos, esta capacitación ya no tiene cupos disponibles.');
+        }
+
+        // 3. Reactivar la cancelada o crear una nueva
+        if ($inscripcionExistente) {
             $inscripcionExistente->update([
-                'estado' => 'Inscrito'
+                'estado'   => 'Inscrito',
+                'progreso' => 0,
             ]);
 
             return redirect()->route('inscripciones.index')
                 ->with('success', '¡Te has vuelto a inscribir exitosamente!');
         }
 
-        // 2. Si no existía ningún registro previo, crear uno nuevo
         Inscripcion::create([
-            'user_id' => $userId,
-            'capacitacion_id' => $capacitacionId,
-            'estado' => 'Inscrito',
+            'user_id'         => $userId,
+            'capacitacion_id' => $capacitacion->id,
+            'estado'          => 'Inscrito',
+            'progreso'        => 0,
         ]);
 
         return redirect()->route('inscripciones.index')
